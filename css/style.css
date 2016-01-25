@@ -1,0 +1,70 @@
+.top {
+	background-color:#e67e22;
+}
+
+.topIcon {
+	float:right;
+	margin-right:20px;
+	margin-top:25px;
+	color:#ffffff;
+}
+
+.navPane {
+	height:800px;
+	width:200px;
+	background-color:#333333;
+	float:left;
+}
+
+.navPane .navbar ul {
+   float: none;
+}
+
+.navPane .navbar li {
+   display: block;
+   float:none;
+   background-color:#e67e22;
+  border: 1px solid #333333;
+}
+
+.navbar-default .navbar-nav li a {
+  color:#000000;
+  font-weight:bold;
+}
+
+.navbar-default {
+  background-color:#333333;
+  border:none;
+  margin-top:50px;
+}
+
+.navPane .navbar li a {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.thumbnail h3 {
+  background-color:#e67e22;
+  color:#ffffff;
+}
+
+.thumbnail {
+  margin-top:20px;
+  background-color:#333333;
+}
+
+.thumbnail p {
+  color:#000000;
+}
+
+.select {
+  float:left;
+}
+
+.new {
+  float:right;
+}
+
+.checkbox {
+  color:white;
+}
