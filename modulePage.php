@@ -1,3 +1,42 @@
+<?php
+/**
+ * social networking PHP start
+ */
+session_start();
+$signedIn = false;
+if (isset($social_network)) {
+    $signedIn = true;
+    $social_network = $_COOKIE['social_network'];
+    switch ($social_network) {
+        case 'facebook':
+            $fb_user_info = array('verified_fb_user_id' => $_COOKIE['verified_fb_user_id'], 'verified_fb_user_name' =>
+                $_COOKIE['verified_fb_user_name']);
+            break;
+        case 'google':
+            $google_user_info = array('verified_google_user_id' => $_COOKIE['verified_google_user_id'],
+                'verified_google_user_name' => $_COOKIE['verified_google_user_name'],
+                'verified_google_user_email' => $_COOKIE['verified_google_user_email']);
+            break;
+        case 'twitter':
+            $twitter_user_info = array('verified_twitter_user_id' => $_COOKIE['verified_twitter_user_id'],
+                'verified_twitter_user_name' => $_COOKIE['verified_twitter_user_name']);
+            break;
+        default:
+
+    }
+}
+
+if ($signedIn = false) {
+    $home_url = $_SERVER['DOCUMENT_ROOT'];
+    header('Location' . $home_url);
+}
+
+/**
+ * social networking PHP end
+ */
+
+?>
+
 <!DOCTYPE HTML>
 <html>
 <head id="head">
@@ -48,6 +87,34 @@
 
 <body style="margin-left: auto; margin-right: auto;">
 
+<?php
+/**
+ *  report user details no matter what social network for debugging
+ */
+if ($signedIn) {
+    switch ($social_network) {
+        case 'facebook':
+            foreach ($fb_user_info as $index => $element) {
+                echo '<br>';
+                echo 'index: ' . $index . '... element ' . $element;
+            }
+            break;
+        case 'google':
+            foreach ($google_user_info as $index => $element) {
+                echo '<br>';
+                echo 'index: ' . $index . '... element ' . $element;
+            }
+            break;
+        case 'twitter':
+            foreach ($twitter_user_info as $index => $element) {
+                echo '<br>';
+                echo 'index: ' . $index . '... element ' . $element;
+            }
+            break;
+        default:
+    }
+}
+?>
 <div>
 
 
