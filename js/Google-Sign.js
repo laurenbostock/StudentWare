@@ -1,5 +1,5 @@
 /**
- * Created by fmerzadyan on 21/11/15.
+ * Created by fmerzadyan
  */
 
 function onSignIn(googleUser) {
