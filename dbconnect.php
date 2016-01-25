@@ -1,8 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "Ruby_Wire323846";
-
+$servername = "selene.hud.ac.uk/studentware/";
+$username = "studentware";
+$password = "ac43shopPC";
 // Create connection
 $conn = new mysqli($servername, $username, $password);
 
