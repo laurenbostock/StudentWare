@@ -9,15 +9,15 @@ if(isset($_SESSION['user']))
 
 if(isset($_POST['btn-login']))
 {
-	$email = $_POST['email'];
+	$input = $_POST['email'];
 	$pass = $_POST['pass'];
 
-  $stmt = $conn->prepare("SELECT * FROM Accounts WHERE email=:email");
-  $stmt->bindValue(':email',$email);
+  $stmt = $conn->prepare("SELECT * FROM Accounts WHERE email=:input OR name=:input");
+  $stmt->bindValue(':input',$input);
   $stmt->execute();
 
   if($users=$stmt->fetch(PDO::FETCH_OBJ)) {
-   if ($users->password == md5($pass)) {
+   if (password_verify($pass, $users->password)) {
     $_SESSION['user'] = $users->user_id;
     header("Location: homepage.php");
   }

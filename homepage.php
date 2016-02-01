@@ -114,6 +114,8 @@ if(isset($_POST['addModule']))
                   <h3>My Reminders</h3>
              </div>
        </div>
+       </div>
+       <div class="row">
        <div class="col-md-6">
              <div class="thumbnail">
                  <h3>My Modules</h3>  
@@ -123,11 +125,11 @@ if(isset($_POST['addModule']))
                     <button type="submit" name="deleteModule" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                      
                  <?php
-                   $stmt = $conn->prepare("SELECT * FROM modules WHERE workspace_id=:workspace_id");
-                   $stmt->bindValue(':workspace_id', $workspaceid);
-                   $stmt->execute();  
+                     $stmt = $conn->prepare("SELECT * FROM modules WHERE workspace_id=:workspace_id");
+                     $stmt->bindValue(':workspace_id', $workspaceid);
+                     $stmt->execute();  
 
-                    // loop through results of database query, displaying them in the table
+                    //loop through results of database query, displaying them in the table
                      while($modules=$stmt->fetch(PDO::FETCH_OBJ)) {
                       echo "<div class='checkbox'>";
                       echo "<label>";
@@ -138,7 +140,7 @@ if(isset($_POST['addModule']))
 
                     if(isset($_POST['deleteModule']))
                     {
-                    $moduleToDelete = $_POST['moduleCheck'];
+                      $moduleToDelete = $_POST['moduleCheck'];
                       $N = count($moduleToDelete);
 
                       for($i=0; $i < $N; $i++)
@@ -156,9 +158,9 @@ if(isset($_POST['addModule']))
              </div>
        </div>
        <div class="col-md-6">
-            <div class="thumbnail">
-                <h3>My Calendar</h3>
-            </div>
+          <div class="thumbnail">
+              <h3>My Calendar</h3>
+          </div>
       </div>
     </div>
   </div>

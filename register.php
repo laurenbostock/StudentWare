@@ -32,12 +32,12 @@ if(isset($_POST['btn-signup']))
 {
 	$uname = $_POST['uname'];
 	$email = $_POST['email'];
-	$passEncrypt = md5($_POST['password']);
+	$passEncrypt =password_hash($_POST['password'], PASSWORD_DEFAULT);
 	$pass = $_POST['password'];
 	$cpass = $_POST['passwordc'];
 
 	//check if email already exists in db
-	$emailCheck = $conn->prepare("SELECT * FROM Accounts WHERE email= :email");
+	$emailCheck = $conn->prepare("SELECT * FROM accounts WHERE email= :email");
 	$emailCheck->bindParam(':email', $email);
 	$emailCheck->execute();
 	$rows = $emailCheck->fetch(PDO::FETCH_NUM);
@@ -47,7 +47,7 @@ if(isset($_POST['btn-signup']))
 	}
 
 	//check if username already exists in db
-	$nameCheck = $conn->prepare("SELECT * FROM Accounts WHERE name= :uname");
+	$nameCheck = $conn->prepare("SELECT * FROM accounts WHERE name= :uname");
 	$nameCheck->bindParam(':uname', $uname);
 	$nameCheck->execute();
 	$rows = $nameCheck->fetch(PDO::FETCH_NUM);
@@ -63,7 +63,7 @@ if(isset($_POST['btn-signup']))
 	}
 
 	//insert user into db
-	$stmt=$conn->prepare("INSERT INTO Accounts VALUES (NULL, :uname, :email, :passEncrypt)");
+	$stmt=$conn->prepare("INSERT INTO accounts VALUES (NULL, :uname, :email, :passEncrypt)");
 	$stmt->bindValue(':uname', $uname);
 	$stmt->bindValue(':email', $email);
 	$stmt->bindValue(':passEncrypt', $passEncrypt);
@@ -87,13 +87,13 @@ if(isset($_POST['btn-signup']))
     </div>
     <div class="row form">
       <form method="POST" id="register_fillin">
-	      	<input id="usernameTextbox" type="text" class="form-control test" placeholder="Username">
-		  	<input id="emailTextbox" type="email" class="form-control test" placeholder="Your Email">
-		  	<input id="password" type="password" class="form-control test" placeholder="Your Password" onkeyup="matchPass(); return false;">
-		  	<input id="passwordc" type="password" class="form-control test" placeholder="Retype Password" onkeyup="matchPass(); return false;">
-			<button id="sign_up" type="submit" class="btn btn-primary">Sign Up</button>
+	      	<input id="usernameTextbox" type="text" name="uname" class="form-control test" placeholder="Username">
+		  	<input id="emailTextbox" type="email" name="email" class="form-control test" placeholder="Your Email">
+		  	<input id="password" type="password" name="password" class="form-control test" placeholder="Your Password" onkeyup="matchPass(); return false;">
+		  	<input id="passwordc" type="password" name="passwordc" class="form-control test" placeholder="Retype Password" onkeyup="matchPass(); return false;">
+			<button id="sign_up" type="submit" name="btn-signup" class="btn btn-primary">Sign Up</button>
 			<p>Already registered?</p>
-        	 <button id="sign_in" type="submit" class="btn btn-primary" name="btn-login">Sign In</button>
+        	<a href="index.php" class="btn btn-primary">Sign In</a>
 	  </form>
 	 </div>
 	  <div class="row">
