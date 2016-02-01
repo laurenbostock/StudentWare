@@ -12,7 +12,7 @@ if(isset($_POST['btn-login']))
 	$input = $_POST['email'];
 	$pass = $_POST['pass'];
 
-  $stmt = $conn->prepare("SELECT * FROM Accounts WHERE email=:input OR name=:input");
+  $stmt = $conn->prepare("SELECT * FROM accounts WHERE email=:input OR name=:input");
   $stmt->bindValue(':input',$input);
   $stmt->execute();
 
