@@ -1,20 +1,3 @@
-<style> <!--Basic Webpage StyleSheet-->
-.moduleContainer
-{
-    background-color: #FF530D;
-    min-height: 300px;
-    max-height: 300px;
-	min-width: 600px;
-	max-width: 600px;
-}
-.moduleTitle
-{
-	width: 100%;
-    background-color: gray;
-	text-align: center;
-}
-</style>
-
 <?php //display Documents
 /** @Author :- David Thaxter
 *	@Version :- v1.0.1
@@ -134,38 +117,10 @@ if(unlink($base_directory.$documentid))
 
 
 
-<table border = "0" width = "80%"><!---Webpage Content--->
-	<tr>	
-		<td>
-			<div class = "moduleContainer">
-				<div class = "moduleTitle">
-					Upcomming Events
-				</div>
-			</div>
-		</td>
-		<td>
-			<div class = "moduleContainer">
-				<div class = "moduleTitle">
-					Recent Documents
-				</div>
-				<?php displayDocuments(1); ?>
-			</div>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<div class = "moduleContainer">
-				<div class = "moduleTitle">
-					Sticky Notes
-				</div>
-			</div>
-		</td>
-		<td>
-			<div class = "moduleContainer">
-				<div class = "moduleTitle">
-					Checklist
-				</div>
-			</div>
-		</td>
-	</tr>
-</table>
+
+<div class = "col-md-6">
+	<div class = "thumbnail">
+		Recent Documents
+	</div>
+	<?php displayDocuments(1); ?>
+</div>
