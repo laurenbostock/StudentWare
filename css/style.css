@@ -85,3 +85,14 @@
 .newModule {
   float:left;
 }
+
+/* Validation for registration form */
+.valError {
+  color: red;
+  visibility: hidden;
+}
+
+/* Validation for registering */
+.error {
+  color: red;
+}

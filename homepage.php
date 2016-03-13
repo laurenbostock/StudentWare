@@ -16,7 +16,7 @@ if(isset($_POST['workspaceSubmit']))
   $stmt->bindValue(':wname', $name);
   $stmt->bindValue(':userid', $_SESSION['user']);
   $stmt->execute();
-  $workspaceid = $conn->lastinsertId();
+  header("Location: homepage.php?workspace=".$conn->lastinsertId()."");
 }
 
 if(!isset($_GET['workspace']))
@@ -46,9 +46,6 @@ if(isset($_POST['addModule']))
     $stmt->bindValue(':module_name', $modulename);
     $stmt->execute();
 }
-
-
-
 ?>
 
 <!DOCTYPE HTML>
@@ -71,10 +68,17 @@ if(isset($_POST['addModule']))
       <div class="navPane">
           <div class="navbar navbar-default navTest" role="navigation">
               <ul class="nav navbar-nav">
-                <li><a href="#">Module 1</a></li>
-                <li><a href="#">Module 2</a></li>
-                <li><a href="#">Module 3</a></li>
-                <li><a href="#">Module 4</a></li>
+                <?php
+                     $stmt = $conn->prepare("SELECT * FROM modules WHERE workspace_id=:workspace_id");
+                     $stmt->bindValue(':workspace_id', $workspaceid);
+                     $stmt->execute();  
+
+                    //loop through results of database query, displaying them in the table
+                     while($modules=$stmt->fetch(PDO::FETCH_OBJ)) { 
+                       echo "<li><a href='#'>".$modules->module_name."</a></li>";
+                      }
+                  ?>
+                <li><a href="#">Lecture Notes</a></li>
               </ul>
           </div>
       </div>
