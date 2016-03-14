@@ -16,6 +16,7 @@ if(isset($_POST['workspaceSubmit']))
   $stmt->bindValue(':wname', $name);
   $stmt->bindValue(':userid', $_SESSION['user']);
   $stmt->execute();
+  header("Location: homepage.php?workspace=".$conn->lastinsertId()."");
 }
 
 if(!isset($_GET['workspace']))
@@ -27,6 +28,9 @@ if(!isset($_GET['workspace']))
 
  if ($workspaces = $stmt->fetch(PDO::FETCH_OBJ)) {
   $workspaceid = $workspaces->workspace_id;
+ }
+ else {
+  $workspaceid = null;
  }
 }
 else {
@@ -42,9 +46,6 @@ if(isset($_POST['addModule']))
     $stmt->bindValue(':module_name', $modulename);
     $stmt->execute();
 }
-
-
-
 ?>
 
 <!DOCTYPE HTML>
@@ -67,15 +68,26 @@ if(isset($_POST['addModule']))
       <div class="navPane">
           <div class="navbar navbar-default navTest" role="navigation">
               <ul class="nav navbar-nav">
-                <li><a href="#">Module 1</a></li>
-                <li><a href="#">Module 2</a></li>
-                <li><a href="#">Module 3</a></li>
-                <li><a href="#">Module 4</a></li>
+                <?php
+                     $stmt = $conn->prepare("SELECT * FROM modules WHERE workspace_id=:workspace_id");
+                     $stmt->bindValue(':workspace_id', $workspaceid);
+                     $stmt->execute();  
+
+                    //loop through results of database query, displaying them in the table
+                     while($modules=$stmt->fetch(PDO::FETCH_OBJ)) { 
+                       echo "<li><a href='#'>".$modules->module_name."</a></li>";
+                      }
+                  ?>
+                <li><a href="#">Lecture Notes</a></li>
               </ul>
           </div>
       </div>
     <div class="container text-center">
       <div class="row">
+        <?php if ($workspaceid == null) {
+         echo "You have no workspaces, please create one.";
+       }
+       else { ?>
         <div class="select">
         <p>Select Workspace:</p>
         <div class="dropdown">
@@ -96,13 +108,15 @@ if(isset($_POST['addModule']))
           </ul>
         </div>
         </div>
-         <div class="new">
+        <?php } ?>
+         <div class="newWorkspace">
          <form action="" method="POST">
             <input type="text" name="wName" placeholder="Workspace name">
             <button type="submit" name="workspaceSubmit" class="btn btn-success"><i class="fa fa-plus"></i></button>
          </form> 
           </div>
         </div>
+       <?php if ($workspaceid != null) { ?>
         <div class="row">
         <div class="col-md-6">
              <div class="thumbnail">
@@ -123,14 +137,14 @@ if(isset($_POST['addModule']))
                     <input type="text" name="module_name" placeholder="Module name"/>
                     <button type="submit" name="addModule" class="btn btn-success"><i class="fa fa-plus"></i></button>
                     <button type="submit" name="deleteModule" class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                     
+                  
                  <?php
                      $stmt = $conn->prepare("SELECT * FROM modules WHERE workspace_id=:workspace_id");
                      $stmt->bindValue(':workspace_id', $workspaceid);
                      $stmt->execute();  
 
                     //loop through results of database query, displaying them in the table
-                     while($modules=$stmt->fetch(PDO::FETCH_OBJ)) {
+                     while($modules=$stmt->fetch(PDO::FETCH_OBJ)) { 
                       echo "<div class='checkbox'>";
                       echo "<label>";
                       echo"<input type='checkbox' name='moduleCheck[]' value='".$modules->module_id."'>".$modules->module_name;
@@ -147,8 +161,7 @@ if(isset($_POST['addModule']))
                       {
                          $stmt = $conn->prepare("DELETE FROM modules WHERE workspace_id=:workspace_id AND module_id=:module_id");
                          $stmt->bindValue(':module_id', $moduleToDelete[$i]);
-                         echo $moduleToDelete[$i];
-                         $stmt->bindValue(':workspace_id', $workspaceid);
+                          $stmt->bindValue(':workspace_id', $workspaceid);
                          $stmt->execute();  
                       }
                     }
@@ -163,6 +176,7 @@ if(isset($_POST['addModule']))
           </div>
       </div>
     </div>
+    <?php } ?>
   </div>
 
 </body>

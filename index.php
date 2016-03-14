@@ -2,6 +2,8 @@
 session_start();
 include_once 'dbconnect.php';
 
+$loginError = false;
+
 if(isset($_SESSION['user']))
 {
 	header("Location: homepage.php");
@@ -17,12 +19,13 @@ if(isset($_POST['btn-login']))
   $stmt->execute();
 
   if($users=$stmt->fetch(PDO::FETCH_OBJ)) {
-   if (password_verify($pass, $users->password)) {
-    $_SESSION['user'] = $users->user_id;
-    header("Location: homepage.php");
+     if (password_verify($pass, $users->password)) {
+      $_SESSION['user'] = $users->user_id;
+      header("Location: homepage.php");
+    }
   }
-}
-echo "Wrong Details";
+
+  $loginError = true;
 }
 ?>
 
@@ -52,9 +55,15 @@ echo "Wrong Details";
             <i class="fa fa-lock fa-2x"></i><input id="loginTextBoxes" type="password" name="pass" placeholder="Your Password" required />
           </div>
 
-          <button id="sign_in" type="submit" name="btn-login">Sign In</button>
+          <?php 
+          if ($loginError) {
+            echo"<div><span class='error'>Incorrect email or password, please try again</span></div>";
+          } ?>
+
+          <button id="sign_in" type="submit" name="btn-login" class="btn btn-primary">Sign In</button>
           </form>
-          <p><a href="register.php">Register</a> </p> 
+          <p>Or create an account</p>
+          <a href="register.php" class="btn btn-primary">Register</a>
     </div>
   </div>
 </body>
