@@ -1,136 +1,96 @@
+<?php
+session_start();
+require_once 'dbconnect.php';
+
+if(!isset($_SESSION['user']))
+{
+  header("Location: index.php");
+}
+
+if(!isset($_GET['module']))
+{
+
+ $stmt = $conn->prepare("SELECT * FROM module WHERE user_id = :userid");
+ $stmt->bindValue(':userid', $_SESSION['user']);
+ $stmt->execute();
+
+ if ($modules = $stmt->fetch(PDO::FETCH_OBJ)) {
+  $moduleid = $modules->module_id;
+ }
+}
+else {
+$moduleid = $_GET['module'];
+}
+
+$stmt = $conn->prepare("SELECT workspace_id FROM modules where module_id = :moduleid");
+$stmt->bindValue(':moduleid', $moduleid);
+$stmt->execute();
+
+ if ($modules = $stmt->fetch(PDO::FETCH_OBJ)) {
+  $workspaceid = $modules->workspace_id;
+ }
+
+
+?>
+
 <!DOCTYPE HTML>
 <html>
-<head id="head">
-<script src="js/themeControl.js"></script>
-<link rel="stylesheet" type="text/css" href="css/menu_styles.css"/>
-<link rel="stylesheet" type="text/css" href="css/styles.css"/>
-	<meta http-equiv="content-type" content="text/html" />
-	<meta name="author" content="gencyolcu" />
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+     <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+     <title>StudentWare Homepage</title> 
+  </head>
+  <body>
+      <div class="row top">
+        <img src="images/logo.png"/>
+        <a href="logout.php?logout"><i class="fa fa-sign-out fa-4x topIcon"></i></a>
+        <a href="#"><i class="fa fa-cog fa-4x topIcon"></i></a>
+        <a href="#"><i class="fa fa-paint-brush fa-4x topIcon"></i></a>
+      </div>
+      <div class="navPane">
+          <div class="navbar navbar-default navTest" role="navigation">
+              <ul class="nav navbar-nav">
+                <?php
+                     echo "<li><a href='homepage.php?workspace=".$workspaceid."'>Home</a></li>";
+                     $stmt = $conn->prepare("SELECT * FROM modules WHERE workspace_id=:workspace_id");
+                     $stmt->bindValue(':workspace_id', $workspaceid);
+                     $stmt->execute();  
 
-	<title>StudentWare Module</title>
-    
-    
-    <div id="top">
-    
-    
-   
-  
-<div id="menubox" class="menu-wrap" style="float: left;">
-  <a><img src="images/logo.png" style="float: left; width: 200px; margin-left: 10px; margin-top: 4px;"/>
-    </a>
-    <nav class="menu" style="float: right;">
-        <ul class="clearfix">
-            
-            <li>
-                <a href="#"><img src="images/theme_pic.png" width="40px;"/> <span class="arrow">&#9660;</span></a>
- 
-                <ul class="sub-menu" id="subMenu">
-                    <li id="button1"><a type="submit" onclick="switch_style1();return false;" href="#">Theme One</a></li>
-                    <li><a href="#" onclick="switch_style2();return false;">Theme Two</a></li>
-                    <li><a href="#" onclick="switch_style3();return false;">Theme Three</a></li>
-                    <li><a href="#" onclick="original_style();return false;">Theme Four</a></li>
-                    
-                    
-                </ul>
-            </li>
-            <li><a href="#"><img  src="images/settinglogo.png" width="40px"/></a></li>
-            <li><a href="logout.php?logout"><img src="images/logoutpic.png" width="40px"/></a></li>
-            
-        </ul>
-    </nav>
-</div>
-
-    
+                    //loop through results of database query, displaying them in the table
+                     while($modules=$stmt->fetch(PDO::FETCH_OBJ)) { 
+                       echo "<li><a href='modulePage.php?module=".$modules->module_id."'>".$modules->module_name."</a></li>";
+                      }
+                  ?>
+                <li><a href="#">Lecture Notes</a></li>
+              </ul>
+          </div>
+      </div>
+    <div class="container text-center">
+      <div class="row">
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+             <div class="thumbnail">
+                 <h3>Module Checklist</h3>
+             </div>
+       </div>
+        <div class="col-md-6">
+              <div class="thumbnail">
+                  <h3>Module Documents</h3>
+             </div>
+       </div>
+       </div>
+       <div class="row">
+       <div class="col-md-12">
+             <div class="thumbnail">
+                 <h3>StickyNotes</h3>  
+             </div>
+       </div>
     </div>
-    
-    
-    
-   
-    
-    
-    
-</head>
-
-<body style="margin-left: auto; margin-right: auto;">
-
-<div>
-
-
-    
-
-    <div id="main">
-    
-    
-                <div id="firstMain">
-                
-                <button class="addButton" type="button"><img src="images/deletepic.png" style="width: 20px;"/></button>
-                <button class="addButton" type="button"><img src="images/addpic.png" style="width: 20px;   padding-top: 3px;"/></button>
-                
-                
-                </div>
-    
-                <div id="secondMain">
-                
-                
-                    <div id="tab1" style="float: left;">
-                            <div id="tabtitle">
-                                <img src="images/checklist.png" width="25px" style="float: left; margin-right: 3px;"/>
-                                <p style="float: left; font-size: 25px; color: white; position: relative; bottom: 25px;">Module Checklist</p>
-                                <button class="addButton" type="button" style="float: right;"><img src="images/deletepic.png" style=" width: 20px; "/></button>
-                                    <button class="addButton" style=" position: relative; left:200px;" type="button"><img src="images/addpic.png" style="width: 20px; "/></button>
-                                                                      
-                            </div>
-                            
-                            <div id="tabbody">
-                                                         
-                            
-                            </div>
-                        
-                    </div>
-                    
-                    <div id="tab2" style=" width: 500px; float: left; ">
-                        <div id="tabtitle2">
-                                <img src="images/document.png" width="25px" style="float: left; margin-right: 3px;"/>
-                                <p style=" float: left; font-size: 25px; position: relative; bottom: 25px; color: white;">Module Documents</p>
-                                <button class="addButton" type="button" style="float: right;"><img src="images/deletepic.png" style=" width: 20px; "/></button>
-                                    <button class="addButton" style=" position: relative; left:180px;" type="button"><img src="images/addpic.png" style="width: 20px; "/></button>
-                                      
-                            </div>
-                            
-                            <div id="tabbody2">
-                            
-                            </div>
-                    </div>
-                    
-                    <div id="stickytab" style=" width: 500px; float: left;">
-                        <div id="tabtitle3">
-                                <img src="images/stickynotes.png" width="25px" style="float: left; margin-right: 3px;"/>
-                                <p style=" float: left; position: relative; bottom: 25px; font-size: 25px; color: white;">Sticky Notes</p>
-                                <button class="addButton" type="button" style="float: right;"><img src="images/deletepic.png" style=" width: 20px; "/></button>
-                                    <button class="addButton" style=" position: relative; left:750px;" type="button"><img src="images/addpic.png" style="width: 20px; "/></button>
-                                  
-                            </div>
-                            
-                            <div id="tabbody3">
-                            
-                            </div>
-                    </div>
-                    
-                    
-                    
-                    
-                           
-                </div>
-    
-    
-    </div>
-
-    <div id="bottom">
-    
-    </div>
-
-
-</div>
+  </div>
 
 </body>
 </html>

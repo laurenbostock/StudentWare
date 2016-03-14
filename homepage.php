@@ -69,13 +69,14 @@ if(isset($_POST['addModule']))
           <div class="navbar navbar-default navTest" role="navigation">
               <ul class="nav navbar-nav">
                 <?php
+                     echo "<li><a href='homepage.php?workspace=".$workspaceid."'>Home</a></li>";
                      $stmt = $conn->prepare("SELECT * FROM modules WHERE workspace_id=:workspace_id");
                      $stmt->bindValue(':workspace_id', $workspaceid);
                      $stmt->execute();  
 
                     //loop through results of database query, displaying them in the table
                      while($modules=$stmt->fetch(PDO::FETCH_OBJ)) { 
-                       echo "<li><a href='#'>".$modules->module_name."</a></li>";
+                       echo "<li><a href='modulePage.php?module=".$modules->module_id."'>".$modules->module_name."</a></li>";
                       }
                   ?>
                 <li><a href="#">Lecture Notes</a></li>
